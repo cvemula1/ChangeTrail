@@ -1,0 +1,16 @@
+apiVersion: v2
+name: changetrail
+description: Unified change timeline for incident context
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - devops
+  - incident-response
+  - change-tracking
+  - kubernetes
+maintainers:
+  - name: cvemula1
+home: https://github.com/cvemula1/ChangeTrail
+sources:
+  - https://github.com/cvemula1/ChangeTrail

@@ -1,0 +1,44 @@
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+*.whl
+
+# virtual environments
+.venv/
+venv/
+env/
+
+# testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# node / ui
+node_modules/
+ui/dist/
+
+# secrets — never commit these
+.env
+.env.local
+.env.*.local
+
+# editors & OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# databases
+*.db
+*.sqlite3
+
+# docker
+docker-compose.override.yml

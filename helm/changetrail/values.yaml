@@ -1,0 +1,56 @@
+replicaCount: 1
+
+image:
+  repository: changetrail/changetrail
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: false
+  className: nginx
+  annotations: {}
+  hosts:
+    - host: changetrail.local
+      paths:
+        - path: /
+          pathType: Prefix
+
+env:
+  CT_DEBUG: "false"
+  CT_KUBERNETES_ENABLED: "true"
+  CT_KUBERNETES_NAMESPACE: ""
+  CT_GITHUB_ENABLED: "false"
+  CT_EVENT_RETENTION_DAYS: "30"
+
+secrets:
+  CT_GITHUB_TOKEN: ""
+  CT_GITHUB_WEBHOOK_SECRET: ""
+
+postgresql:
+  enabled: true
+  auth:
+    username: changetrail
+    password: changetrail
+    database: changetrail
+  primary:
+    persistence:
+      size: 5Gi
+
+serviceAccount:
+  create: true
+  annotations: {}
+
+rbac:
+  create: true
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

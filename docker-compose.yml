@@ -1,0 +1,48 @@
+# ChangeTrail — docker compose stack
+# Copyright (c) 2026 cvemula1 — MIT License
+# https://github.com/cvemula1/ChangeTrail
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: changetrail
+      POSTGRES_PASSWORD: changetrail
+      POSTGRES_DB: changetrail
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U changetrail"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      CT_DATABASE_URL: postgresql+asyncpg://changetrail:changetrail@db:5432/changetrail
+      CT_DATABASE_URL_SYNC: postgresql+psycopg2://changetrail:changetrail@db:5432/changetrail
+      CT_KUBERNETES_ENABLED: "false"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  ui:
+    build: ./ui
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
